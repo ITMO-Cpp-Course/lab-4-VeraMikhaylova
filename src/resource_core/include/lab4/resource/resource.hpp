@@ -7,14 +7,13 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-using namespace std;
 namespace lab4::resource
 {
 
-class ResourceError : public runtime_error
+class ResourceError : public std::runtime_error
 {
   public:
-    explicit ResourceError(const string& message);
+    explicit ResourceError(const std::string& message);
 
     explicit ResourceError(const char* message);
 };
@@ -22,7 +21,7 @@ class ResourceError : public runtime_error
 class FileHandle
 {
   public:
-    explicit FileHandle(const string& path, int flags);
+    explicit FileHandle(const std::string& path, int flags);
     explicit FileHandle(int fd) noexcept;
 
     FileHandle(const FileHandle&) = delete;
@@ -35,8 +34,8 @@ class FileHandle
 
     bool is_valid() const noexcept;
 
-    long read(char* buffer, size_t count);
-    long write(const char* buffer, size_t count);
+    long read(char* buffer, std::size_t count);
+    long write(const char* buffer, std::size_t count);
 
     bool operator==(const FileHandle& other) const;
     bool operator!=(const FileHandle& other) const;
@@ -48,12 +47,12 @@ class FileHandle
 class ResourceManager
 {
   public:
-    shared_ptr<FileHandle> acquire(const string& path, int flags);
+    std::shared_ptr<FileHandle> acquire(const std::string& path, int flags);
     void clear();
-    void release(const string& path);
+    void release(const std::string& path);
 
   private:
-    unordered_map<string, weak_ptr<FileHandle>> cache_;
+    std::unordered_map<std::string, std::weak_ptr<FileHandle>> cache_;
 };
 
 } // namespace lab4::resource
