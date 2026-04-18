@@ -4,13 +4,13 @@
 #include <cstring>
 #include <fcntl.h>
 #include <iostream>
-#include <lab4/resource/resource.hpp>
+#include <lab4/resource/resource_FileHandle.hpp>
+#include <lab4/resource/resource_ResourceError.hpp>
+#include <lab4/resource/resource_ResourceManager.hpp>
 #include <unistd.h>
 #include <vector>
 namespace lab4::resource
 {
-ResourceError::ResourceError(const std::string& message) : std::runtime_error(message) {}
-ResourceError::ResourceError(const char* message) : std::runtime_error(message) {}
 bool FileHandle::is_valid() const noexcept
 {
     return fd_ >= 0;
@@ -83,39 +83,6 @@ bool FileHandle::operator==(const FileHandle& other) const
 bool FileHandle::operator!=(const FileHandle& other) const
 {
     return fd_ != other.fd_;
-}
-std::shared_ptr<FileHandle> ResourceManager::acquire(const std::string& path, int flags)
-{
-    auto it = cache_.find(path);
-    if (it != cache_.end())
-    {
-        auto oldHandle = it->second.lock();
-        if (oldHandle)
-        {
-            return oldHandle;
-        }
-        else
-        {
-            cache_.erase(it);
-        }
-    }
-    auto newHandle = std::make_shared<FileHandle>(path, flags);
-    cache_[path] = newHandle;
-    return newHandle;
-}
-
-void ResourceManager::clear()
-{
-    cache_.clear();
-}
-
-void ResourceManager::release(const std::string& path)
-{
-    auto it = cache_.find(path);
-    if (it != cache_.end() && it->second.expired())
-    {
-        cache_.erase(it);
-    }
 }
 
 }; // namespace lab4::resource

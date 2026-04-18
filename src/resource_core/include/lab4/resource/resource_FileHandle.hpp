@@ -9,15 +9,6 @@
 #include <vector>
 namespace lab4::resource
 {
-
-class ResourceError : public std::runtime_error
-{
-  public:
-    explicit ResourceError(const std::string& message);
-
-    explicit ResourceError(const char* message);
-};
-
 class FileHandle
 {
   public:
@@ -43,16 +34,6 @@ class FileHandle
   private:
     int fd_;
     void close() noexcept;
-};
-class ResourceManager
-{
-  public:
-    std::shared_ptr<FileHandle> acquire(const std::string& path, int flags);
-    void clear();
-    void release(const std::string& path);
-
-  private:
-    std::unordered_map<std::string, std::weak_ptr<FileHandle>> cache_;
 };
 
 } // namespace lab4::resource

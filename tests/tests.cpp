@@ -1,6 +1,8 @@
-#include "lab4/resource/resource.hpp"
 #include <catch2/catch_all.hpp>
 #include <fcntl.h>
+#include <lab4/resource/resource_FileHandle.hpp>
+#include <lab4/resource/resource_ResourceError.hpp>
+#include <lab4/resource/resource_ResourceManager.hpp>
 using namespace lab4::resource;
 TEST_CASE("Test Resources")
 {
